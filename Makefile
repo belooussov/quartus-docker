@@ -11,8 +11,8 @@
 # cd ~/code/github/belooussov
 # git clone https://github.com/belooussov/quartus-docker
 #
-NAME=$(shell basename `pwd|tr -d [:space:]`)
-AUTHOR=$(shell basename `cd ..pwd|tr -d [:space:]`)
+NAME=quartus
+AUTHOR=belooussov
 
 all: build
 
@@ -22,7 +22,9 @@ download-deps:
 	wget http://download.altera.com/akdlm/software/acdsinst/16.0/211/ib_installers/cyclonev-16.0.0.211.qdz -o ./quartus/cyclonev-16.0.0.211.qdz
 
 build:
-	docker build --no-cache=false -t $(AUTHOR)/$(NAME):latest .
+	docker build -t $(AUTHOR)/$(NAME):latest .
+	#cd image && docker build -t $(AUTHOR)/$(NAME):latest .
+	#docker build --no-cache=false -t $(AUTHOR)/$(NAME):latest .
 
 bash:
 	docker run -it -e DEBUG=ON -P $(AUTHOR)/$(NAME):latest
