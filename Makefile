@@ -1,16 +1,8 @@
 .PHONY: all build bash run pull
 
-# http://download.altera.com/akdlm/software/acdsinst/16.0/211/ib_tar/Quartus-lite-16.0.0.211-linux.tar
-# quartus/QuartusLiteSetup-16.0.0.211-linux.run
 # http://download.altera.com/akdlm/software/acdsinst/16.0.1/218/ib_tar/Quartus-lite-16.0.1.218-linux.tar
 # http://download.altera.com/akdlm/software/acdsinst/16.0/211/ib_installers/cyclonev-16.0.0.211.qdz
-# quartus/cyclonev-16.0.0.211.qdz
-#
-# tip: checkout path should be like this:
-# mkdir -p  ~/code/github/belooussov
-# cd ~/code/github/belooussov
-# git clone https://github.com/belooussov/quartus-docker
-#
+
 NAME=quartus
 AUTHOR=belooussov
 
@@ -27,10 +19,18 @@ build:
 	#docker build --no-cache=false -t $(AUTHOR)/$(NAME):latest .
 
 bash:
-	docker run -ti -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix${DISPLAY} -v /dev:/dev -v workspace:/workspace --workdir=/workspace $(AUTHOR)/$(NAME):latest /bin/bash
+	xhost +
+	docker run -ti -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix${DISPLAY} -v /dev:/dev $(AUTHOR)/$(NAME):latest /bin/bash
 
 run:
-	docker run -ti -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix${DISPLAY} -v /dev:/dev -v workspace:/workspace --workdir=/workspace $(AUTHOR)/$(NAME):latest
+	@echo "*****************************************************************************"
+	@echo "Make sure SELinux is disabled, else docker cannot connect to your X11 socket!"
+	@echo "After you install device drivers, just restart quartus from the xterm:"
+	@echo "#############################################################################"
+	@echo "/opt/altera_lite/quartus/bin/quartus"
+	@echo "#############################################################################"
+	@xhost +
+	docker run -ti -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix${DISPLAY} -v /dev/:/dev $(AUTHOR)/$(NAME):latest
 
 pull:
 	docker pull docker.io/$(AUTHOR)/$(NAME):latest
