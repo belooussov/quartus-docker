@@ -27,10 +27,10 @@ build:
 	#docker build --no-cache=false -t $(AUTHOR)/$(NAME):latest .
 
 bash:
-	docker run -it -e DEBUG=ON -P $(AUTHOR)/$(NAME):latest
+	docker run -ti -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix${DISPLAY} -v /dev:/dev -v workspace:/workspace --workdir=/workspace $(AUTHOR)/$(NAME):latest /bin/bash
 
 run:
-	docker run -d -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix${DISPLAY} -v /dev:/dev -v ./workspace:/workspace --workdir=/workspace $(AUTHOR)/$(NAME):latest
+	docker run -ti -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix${DISPLAY} -v /dev:/dev -v workspace:/workspace --workdir=/workspace $(AUTHOR)/$(NAME):latest
 
 pull:
 	docker pull docker.io/$(AUTHOR)/$(NAME):latest
