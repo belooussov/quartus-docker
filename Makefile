@@ -9,14 +9,13 @@ AUTHOR=belooussov
 all: build
 
 download-deps:
-	mkdir -p ./quartus
-	wget http://download.altera.com/akdlm/software/acdsinst/16.0.1/218/ib_tar/Quartus-lite-16.0.1.218-linux.tar -o ./quartus/Quartus-lite-16.0.1.218-linux.tar
-	wget http://download.altera.com/akdlm/software/acdsinst/16.0/211/ib_installers/cyclonev-16.0.0.211.qdz -o ./quartus/cyclonev-16.0.0.211.qdz
+	mkdir -p ./download
+	wget http://download.altera.com/akdlm/software/acdsinst/16.0.1/218/ib_tar/Quartus-lite-16.0.1.218-linux.tar -O ./download/Quartus-lite-16.0.1.218-linux.tar
+	wget http://download.altera.com/akdlm/software/acdsinst/16.0/211/ib_installers/cyclonev-16.0.0.211.qdz -O ./download/cyclonev-16.0.0.211.qdz
+	cd download; tar xf Quartus-lite-16.0.1.218-linux.tar; mv components/QuartusLiteSetup-16.0.0.211-linux.run .
 
 build:
-	docker build -t $(AUTHOR)/$(NAME):latest .
-	#cd image && docker build -t $(AUTHOR)/$(NAME):latest .
-	#docker build --no-cache=false -t $(AUTHOR)/$(NAME):latest .
+	docker build -v `pwd`/download/:/download/ -t $(AUTHOR)/$(NAME):latest .
 
 bash:
 	xhost +
